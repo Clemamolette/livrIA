@@ -1,0 +1,5 @@
+https://github.com/mabouseif/Library_Book_Detection
+
+https://github.com/capjamesg/open-shelves
+
+https://universe.roboflow.com/libvision/libvision/dataset/2/images?split=train
