@@ -1,0 +1,19 @@
+# IDE
+.vscode
+.idea
+
+# git
+.gitingore
+
+# venv
+.venv
+
+# env
+*.env
+
+# python
+__pycache__*
+*.pyc
+
+
+
