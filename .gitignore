@@ -2,6 +2,9 @@
 .vscode
 .idea
 
+# neovim tmp file
+*~
+
 # git
 .gitingore
 
@@ -10,6 +13,9 @@
 
 # env
 *.env
+
+# logs
+logs/
 
 # python
 __pycache__*
