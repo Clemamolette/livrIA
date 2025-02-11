@@ -14,7 +14,8 @@ def codecarbone_fr(func):
         tracker = OfflineEmissionsTracker(
                 project_name="LivrIA",
                 country_iso_code="FRA",
-                output_dir="logs",
+                # output_dir="logs",
+                output_dir=".",
                 output_file="emissions.csv"
         )
         tracker.start()    
