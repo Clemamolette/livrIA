@@ -21,5 +21,8 @@ logs/
 __pycache__*
 *.pyc
 
+# tmp outputs
+book_masks
+
 
 

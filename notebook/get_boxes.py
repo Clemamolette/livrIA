@@ -18,8 +18,6 @@ def inference_yolo_from_image(model, img):
     # Get boxes
     boxes = results[0].obb.xyxyxyxy.cpu().numpy()
 
-    print(boxes)
-
     return boxes 
 
 
@@ -41,13 +39,7 @@ def show_boxes_on_images(image: np.ndarray, boxes):
     return image
 
 
-if __name__ == '__main__':
-    # Load model
-    model = YOLO("../runs/kaggle/runs/obb/yolo11m.pt/weights/best.pt")
-
-    # Load image
-    path = "../test_images/test_proche.jpg"
-    img = cv2.imread(path)
+def get_boxes(model, img, show_image = False):
 
     # Inference
     boxes = inference_yolo_from_image(model, img)
@@ -76,10 +68,13 @@ if __name__ == '__main__':
                 ]
 
     # Show boxes
-    img_with_boxes = show_boxes_on_images(img, boxes)
+    if show_image:
+        img_with_boxes = show_boxes_on_images(img, boxes)
 
-    # Display
-    cv2.imshow("Image", img_with_boxes)
-    cv2.imwrite("test.jpg", img_with_boxes)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+        # Display
+        cv2.imshow("Image", img_with_boxes)
+        cv2.imwrite("test.jpg", img_with_boxes)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+    return boxes
