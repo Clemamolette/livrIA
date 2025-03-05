@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 import os
+import glob
 
 from get_boxes import get_boxes
 
@@ -40,6 +41,10 @@ def get_book_masks(img, boxes):
 def save_book_masks(book_masks, output_folder):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
+    else: # removes previous book masks to prevent having masks from previous pictures
+        files = glob.glob(os.path.join(output_folder, "*.jpg"))
+        for f in files:
+            os.remove(f)
 
     for i, book in enumerate(book_masks):
         cv2.imwrite(os.path.join(output_folder, f"book_{i}.jpg"), book)
