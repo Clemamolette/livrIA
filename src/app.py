@@ -23,18 +23,14 @@ with cent_co:
 # APP PRINCIPALE
 _, center, _ = st.columns(3)
 with center:
-    #st.markdown("Sélectionner une photo de votre bibliothèque")
-    photo = st.file_uploader(label="Sélectionner une photo de votre bibliothèque", label_visibility="visible")
+    photo = st.file_uploader(label="Sélectionner une photo de bibliothèque", label_visibility="visible")
 
-left, right = st.columns(2)
+left, right = st.columns([0.3,0.7], vertical_alignment='center',gap='medium')
 with left:
     if photo is not None:
         st.image(photo)
 with right:
     if photo is not None:
-        st.markdown("La machine travaile ...")
-        st.image('src/cat-cute.gif')
-
         # on convertit l'image uploadée par l'utilisateur dans le format compris par notre modèle
         img = Image.open(photo)
         img_path = os.path.join(output_folder, photo.name)
@@ -42,6 +38,17 @@ with right:
 
         # récupération de tous les masques de livre de l'image
         masks = get_masks(img_path)
-        for mask in masks:
-            st.image(mask)
 
+        st.subheader("Livres détectés :")
+        cols = st.columns(6)
+        for i, mask in enumerate(masks):
+            with cols[i % 6]:
+                st.image(mask)
+                st.markdown(
+                    f"""
+                    <div class="livre">
+                        <strong>Titre - Auteur</strong>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )

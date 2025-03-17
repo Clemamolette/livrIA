@@ -11,3 +11,16 @@
 .st-emotion-cache-xhkv9f {
     width: auto;
 }
+
+.livre {
+    border: 2px solid #ddd; 
+    padding: 10px; 
+    text-align: center; 
+    border-radius: 5px;
+    overflow: scroll;
+}
+
+.livre:hover {
+    background-color: rgba(137, 220, 235,0.2);
+    cursor: pointer;
+}
