@@ -3,33 +3,34 @@ from PIL import Image
 from src.get_masks import get_masks
 import os
 
+# CONFIG
 st.set_page_config(page_title="LivrIA", page_icon="📚")
 with open("src/style.css") as f:
     st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
-
 
 output_folder = "uploaded_images/"
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
-primary_color = 'rgb(89, 24, 178)'
 
+# LOGO CENTRAL
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
     st.image("src/logo livria.png",width=300)
 
 
-left, right = st.columns(2, border=True)
+
+# APP PRINCIPALE
+_, center, _ = st.columns(3)
+with center:
+    #st.markdown("Sélectionner une photo de votre bibliothèque")
+    photo = st.file_uploader(label="Sélectionner une photo de votre bibliothèque", label_visibility="visible")
+
+left, right = st.columns(2)
 with left:
-    st.markdown("Sélectionner une photo de votre bibliothèque")
-    photo = st.file_uploader(label='')
-with right:
-    st.markdown("Image")
     if photo is not None:
         st.image(photo)
-
-_, cent, _ = st.columns(3)
-with cent:
+with right:
     if photo is not None:
         st.markdown("La machine travaile ...")
         st.image('src/cat-cute.gif')
