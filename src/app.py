@@ -2,15 +2,55 @@ import streamlit as st
 from PIL import Image
 from src.get_masks import get_masks
 import os
+from mistralai import Mistral
+import cv2
 
 # CONFIG
 st.set_page_config(page_title="LivrIA", page_icon="📚")
 with open("src/style.css") as f:
     st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
 
-output_folder = "uploaded_images/"
+output_folder = "tmp/"
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
+
+
+# FONCTIONS
+def convert_image_to_pdf(image_file, pdf_file):
+    image = Image.open(image_file)
+    if image.mode != "RGB":
+        image = image.convert("RGB")
+    image.save(pdf_file)
+
+def extract_text_from_mask(mask_path):
+    api_key = "CYbXnj1pSLnTvGNVYE8rv3JXpkT43yLj"
+    client = Mistral(api_key=api_key)
+
+    pdf_file = mask_path.replace(".jpg", ".pdf")
+    convert_image_to_pdf(mask_path, pdf_file)
+
+    uploaded_pdf = client.files.upload(
+        file={
+            "file_name": pdf_file,
+            "content": open(pdf_file, "rb"),
+        },
+        purpose="ocr"
+    )
+
+    signed_url = client.files.get_signed_url(file_id=uploaded_pdf.id)
+    ocr_response = client.ocr.process(
+        model="mistral-ocr-latest",
+        document={
+            "type": "document_url",
+            "document_url": signed_url.url,
+        }
+    )
+
+    if ocr_response.pages:
+        return ocr_response.pages[0].markdown
+    return "Texte non détecté"
+
+
 
 
 # LOGO CENTRAL
@@ -43,12 +83,20 @@ with right:
         cols = st.columns(6)
         for i, mask in enumerate(masks):
             with cols[i % 6]:
+                # sauvegarde du mask
+                mask_path = os.path.join(output_folder, f"mask_{i}.jpg")
+                cv2.imwrite(mask_path, mask)
+
+                with st.spinner("Lecture du texte..."):
+                    text = extract_text_from_mask(mask_path)    # RECHECK LE FORMAT DE SORTIE ET LIMITE DE L'API
                 st.image(mask)
                 st.markdown(
                     f"""
                     <div class="livre">
-                        <strong>Titre - Auteur</strong>
+                        <strong>{text}</strong>
                     </div>
                     """,
                     unsafe_allow_html=True
                 )
+
+
