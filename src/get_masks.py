@@ -51,13 +51,13 @@ def save_book_masks(book_masks, output_folder):
 
 
 
-def get_masks(img_path):
+def get_boxes_and_masks(img_path):
     model = YOLO("runs/kaggle/runs/obb/yolo11m.pt/weights/best.pt")
     img = cv2.imread(img_path)
     boxes = get_boxes(model, img)
     book_masks = get_book_masks(img, boxes)
 
-    return book_masks
+    return boxes, book_masks
 
 
 
