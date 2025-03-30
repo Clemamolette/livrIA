@@ -73,9 +73,8 @@ with right:
                 mask_path = os.path.join(output_folder, f"mask_{i}.jpg")
                 cv2.imwrite(mask_path, mask)
 
-                #with st.spinner("Lecture du texte..."):
-                    #text = extract_text_from_mask(mask_path)    # RECHECK LE FORMAT DE SORTIE ET LIMITE DE L'API
-                text = "livre"
+                with st.spinner("Lecture du texte..."):
+                    text = extract_text_from_mask(mask_path)  
                 if st.button(text, key=f"button_{i}"):
                     st.session_state.selected_index = i
                     st.rerun()
