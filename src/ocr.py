@@ -9,7 +9,7 @@ def get_data_from_sprin(image_path: str, model: Literal['llama3.2-vision', 'llav
         messages=[
             {
                 'role': 'system',
-                'content': "Your task is to extract the title and author of a book spine. If you can't find the title or author, just say 'Unkown'. Your answer ***MUST*** be in the format 'title: ... \n\nauthor: ...'.",
+                'content': "Ton objectif est d'extraitre le titre et l'auteur d'un livre à partir d'une photo de sa côte. Répond de manière concise et efficace. Lorsque c'est impossible de lire les informations, renvoie 'Inconnu.'.",
             },
             {
                 'role': 'user',
@@ -21,6 +21,6 @@ def get_data_from_sprin(image_path: str, model: Literal['llama3.2-vision', 'llav
     output = response['message']['content'].strip()
 
     # remove all '\n' and replace them with a space
-    output = output.replace('\n', ' ')
+    output = output.replace('\n','').replace(';','\n').replace("Titre: ","").replace("Auteur: ","\n - \n").replace("Titre : ","").replace("Auteur : ","\n - \n").replace("Title: ","").replace("Author: ","\n - \n").replace("Title : ","").replace("Author : ","\n - \n")
 
     return output

@@ -16,6 +16,7 @@ import cv2
 # CONFIG
 if "selected_index" not in st.session_state:
     st.session_state.selected_index = None
+
 st.set_page_config(page_title="LivrIA", page_icon="📚")
 with open("src/style.css") as f:
     st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
@@ -26,6 +27,7 @@ if not os.path.exists(output_folder):
 
 
 # FONCTIONS
+@st.cache_data(show_spinner=False)
 def extract_text_from_mask(mask_path):
     model = ""
     if model_selected.startswith("Modèle 1"):
@@ -61,8 +63,7 @@ with center:
 with select:
     model_selected = st.selectbox(
         "Choisissez le modèle d'OCR à utiliser :",
-        ("Modèle 1 - rapide mais peu précis", "Modèle 2 - assez lent mais plus précis",
-         "Modèle 3 - très lent mais très précis"),
+        ("Modèle 1 - rapide mais peu précis", "Modèle 2 - assez lent mais plus précis", "Modèle 3 - très lent mais très précis"),
         placeholder="Modèle d'OCR à sélectionner",
         index=None
     )
