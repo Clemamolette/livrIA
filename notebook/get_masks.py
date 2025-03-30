@@ -50,8 +50,8 @@ def save_book_masks(book_masks, output_folder):
         cv2.imwrite(os.path.join(output_folder, f"book_{i}.jpg"), book)
 
 
-model = YOLO("runs/kaggle/runs/obb/yolo11m.pt/weights/best.pt")
-path = "test_images/test_proche.jpg"
+model = YOLO("../runs/kaggle/runs/obb/yolo11m.pt/weights/best.pt")
+path = "../test_images/test_proche.jpg"
 img = cv2.imread(path)
 boxes = get_boxes(model, img)
 book_masks = get_book_masks(img, boxes)
