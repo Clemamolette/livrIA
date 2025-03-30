@@ -1,10 +1,17 @@
 import streamlit as st
+
+# this because it crash otherwise
+import torch
+import os
+torch.classes.__path__ = [os.path.join(torch.__path__[0], torch.classes.__file__)]
+
+
 from PIL import Image, ImageDraw
 from src.get_masks import get_boxes_and_masks
+from src.ocr import get_data_from_sprin
 import os
-import numpy as np
-from mistralai import Mistral
 import cv2
+
 
 # CONFIG
 if "selected_index" not in st.session_state:
@@ -20,7 +27,17 @@ if not os.path.exists(output_folder):
 
 # FONCTIONS
 def extract_text_from_mask(mask_path):
-    return "Auteur - Titre"
+    model = ""
+    if model_selected.startswith("Modèle 1"):
+        model = "minicpm-v"
+    elif model_selected.startswith("Modèle 2"):
+        model = "llava-phi3"
+    elif model_selected.startswith("Modèle 3"):
+        model = "llama3.2-vision"
+    else:
+        raise ValueError("Modèle non reconnu")
+
+    return get_data_from_sprin(mask_path, model)
 
 
 def highlight_book(image, boxes, selected_index=None):
@@ -32,37 +49,40 @@ def highlight_book(image, boxes, selected_index=None):
 
 
 # LOGO CENTRAL
-left_co, cent_co,last_co = st.columns(3)
+left_co, cent_co, last_co = st.columns(3)
 with cent_co:
-    st.image("src/logo livria.png",width=300)
+    st.image("src/logo livria.png", width=300)
 
 # APP PRINCIPALE
 _, center, select = st.columns(3, gap='large')
 with center:
-    photo = st.file_uploader(label="Sélectionner une photo de bibliothèque", label_visibility="visible")
+    photo = st.file_uploader(
+        label="Sélectionner une photo de bibliothèque", label_visibility="visible")
 with select:
     model_selected = st.selectbox(
         "Choisissez le modèle d'OCR à utiliser :",
-        ("Modèle 1 - rapide mais peu précis", "Modèle 2 - assez lent mais plus précis", "Modèle 3 - très lent mais très précis"),
+        ("Modèle 1 - rapide mais peu précis", "Modèle 2 - assez lent mais plus précis",
+         "Modèle 3 - très lent mais très précis"),
         placeholder="Modèle d'OCR à sélectionner",
         index=None
     )
 
 
-left, right = st.columns([0.3,0.7], vertical_alignment='center',gap='medium')
+left, right = st.columns([0.3, 0.7], vertical_alignment='center', gap='medium')
 if photo is not None and model_selected is not None:
-        # on convertit l'image uploadée par l'utilisateur dans le format compris par notre modèle
-        img = Image.open(photo)
-        img_path = os.path.join(output_folder, photo.name)
-        img.save(img_path)
+    # on convertit l'image uploadée par l'utilisateur dans le format compris par notre modèle
+    img = Image.open(photo)
+    img_path = os.path.join(output_folder, photo.name)
+    img.save(img_path)
 
-        # récupération de tous les masques de livre de l'image
-        boxes, masks = get_boxes_and_masks(img_path)
+    # récupération de tous les masques de livre de l'image
+    boxes, masks = get_boxes_and_masks(img_path)
 
 with left:
     if photo is not None and model_selected is not None:
-        highlighted_image = highlight_book(img, boxes,selected_index=st.session_state.selected_index)
+        highlighted_image = highlight_book(img, boxes, selected_index=st.session_state.selected_index)
         st.image(highlighted_image)
+
 with right:
     if photo is not None and model_selected is not None:
         st.subheader("Livres détectés :")
@@ -74,10 +94,7 @@ with right:
                 cv2.imwrite(mask_path, mask)
 
                 with st.spinner("Lecture du texte..."):
-                    text = extract_text_from_mask(mask_path)  
+                    text = extract_text_from_mask(mask_path)
                 if st.button(text, key=f"button_{i}"):
                     st.session_state.selected_index = i
                     st.rerun()
-
-
-
