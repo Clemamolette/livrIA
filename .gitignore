@@ -1,0 +1,29 @@
+# IDE
+.vscode
+.idea
+
+# neovim tmp file
+*~
+
+# git
+.gitingore
+
+# venv
+.venv
+
+# env
+*.env
+
+# logs
+logs/
+
+# python
+__pycache__*
+*.pyc
+
+# tmp outputs
+book_masks
+tmp
+uploaded_images
+
+
