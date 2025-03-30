@@ -19,39 +19,8 @@ if not os.path.exists(output_folder):
 
 
 # FONCTIONS
-def convert_image_to_pdf(image_file, pdf_file):
-    image = Image.open(image_file)
-    if image.mode != "RGB":
-        image = image.convert("RGB")
-    image.save(pdf_file)
-
 def extract_text_from_mask(mask_path):
-    api_key = "CYbXnj1pSLnTvGNVYE8rv3JXpkT43yLj"
-    client = Mistral(api_key=api_key)
-
-    pdf_file = mask_path.replace(".jpg", ".pdf")
-    convert_image_to_pdf(mask_path, pdf_file)
-
-    uploaded_pdf = client.files.upload(
-        file={
-            "file_name": pdf_file,
-            "content": open(pdf_file, "rb"),
-        },
-        purpose="ocr"
-    )
-
-    signed_url = client.files.get_signed_url(file_id=uploaded_pdf.id)
-    ocr_response = client.ocr.process(
-        model="mistral-ocr-latest",
-        document={
-            "type": "document_url",
-            "document_url": signed_url.url,
-        }
-    )
-
-    if ocr_response.pages:
-        return ocr_response.pages[0].markdown
-    return "Texte non détecté"
+    return "Auteur - Titre"
 
 
 def highlight_book(image, boxes, selected_index=None):
@@ -61,22 +30,27 @@ def highlight_book(image, boxes, selected_index=None):
         draw.polygon(box.flatten().tolist(), outline=color, width=4)
     return image
 
+
 # LOGO CENTRAL
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
     st.image("src/logo livria.png",width=300)
 
-
-
 # APP PRINCIPALE
-_, center, _ = st.columns(3)
+_, center, select = st.columns(3, gap='large')
 with center:
     photo = st.file_uploader(label="Sélectionner une photo de bibliothèque", label_visibility="visible")
-
+with select:
+    model_selected = st.selectbox(
+        "Choisissez le modèle d'OCR à utiliser :",
+        ("Modèle 1 - rapide mais peu précis", "Modèle 2 - assez lent mais plus précis", "Modèle 3 - très lent mais très précis"),
+        placeholder="Modèle d'OCR à sélectionner",
+        index=None
+    )
 
 
 left, right = st.columns([0.3,0.7], vertical_alignment='center',gap='medium')
-if photo is not None:
+if photo is not None and model_selected is not None:
         # on convertit l'image uploadée par l'utilisateur dans le format compris par notre modèle
         img = Image.open(photo)
         img_path = os.path.join(output_folder, photo.name)
@@ -86,11 +60,11 @@ if photo is not None:
         boxes, masks = get_boxes_and_masks(img_path)
 
 with left:
-    if photo is not None:
+    if photo is not None and model_selected is not None:
         highlighted_image = highlight_book(img, boxes,selected_index=st.session_state.selected_index)
         st.image(highlighted_image)
 with right:
-    if photo is not None:
+    if photo is not None and model_selected is not None:
         st.subheader("Livres détectés :")
         cols = st.columns(6)
         for i, mask in enumerate(masks):
