@@ -1,7 +1,37 @@
 # livrIA
-coucou
 
-### Configuration machine CY :
+<img src="rsc/logo_gpsqueak.png" width="500em">
+
+LivrIA est une solution d'IA permettant d'obtenir la liste des livres présent dans une phot de biliothèque.
+
+La liste d'application est multiple, ce workflow peut s'inscrire dans un projet de gestion d'inventaire pour les bibliothèques, de suivi de collection personnelle ou de recherche d'un livre précis sur une étagère de livres non triés.
+
+### Prérequis
+Nous utilisons des modèles de vision pour lire les caractères sur la tranche du livre. Il est donc nécessaire d'avoir les modèles suivant avec ollama : 
+- minicpm-v
+- llava-phi3
+- llama3.2-vision
+
+Pour les installer, utiliser ollama :
+```
+ollama pull nom_modele
+```
+
+
+### Installation
+
+Pour installer les requirements python, à la racine du projet :
+```
+pip install -r erquirements.txt
+```
+
+Pour lancer l'application, à la racine du projet :
+```
+./run.sh
+```
+
+
+### Configuration machine CY
 Platform system: Linux-5.15.0-127-generic-x86_64-with-glibc2.31
 Python version: 3.12.5
 CodeCarbon version: 2.8.3
