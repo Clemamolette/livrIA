@@ -1,6 +1,6 @@
 # livrIA
 
-<img src="rsc/logo_gpsqueak.png" width="500em">
+<img src="src/logo livria.png" width="500em">
 
 LivrIA est une solution d'IA permettant d'obtenir la liste des livres présent dans une phot de biliothèque.
 
