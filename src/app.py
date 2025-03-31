@@ -41,6 +41,8 @@ def extract_text_from_mask(mask_path):
 
     return get_data_from_sprin(mask_path, model)
 
+def resize_image(image, size=(1000, 1000)):
+    return image.resize(size)
 
 def highlight_book(image, boxes, selected_index=None):
     draw = ImageDraw.Draw(image)
@@ -64,7 +66,7 @@ with select:
     model_selected = st.selectbox(
         "Choisissez le modèle de vision à utiliser :",
         ("Minicpm - rapide mais peu précis", "Llava-phi3 - assez lent mais plus précis", "Llama3.2-vision - très lent mais très précis"),
-        placeholder="Modèle d'OCR à sélectionner",
+        placeholder="Modèle de vision à sélectionner",
         index=None
     )
 
@@ -73,6 +75,7 @@ left, right = st.columns([0.3, 0.7], vertical_alignment='center', gap='medium')
 if photo is not None and model_selected is not None:
     # on convertit l'image uploadée par l'utilisateur dans le format compris par notre modèle
     img = Image.open(photo)
+    img = resize_image(img)
     img_path = os.path.join(output_folder, photo.name)
     img.save(img_path)
 

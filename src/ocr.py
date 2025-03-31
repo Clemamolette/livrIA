@@ -21,8 +21,8 @@ def get_data_from_sprin(image_path: str, model: Literal['llama3.2-vision', 'llav
     output = response['message']['content'].strip()
 
     # remove all '\n' and replace them with a space
-    output = output.replace('\n',' - ').replace(';',' - ').replace("Titre: ","").replace("Auteur: "," - ").replace("Titre : ","").replace("Auteur : "," - ").replace("Title: ","").replace("Author: "," - ").replace("Title : ","").replace("Author : "," - ")
+    output = output.replace('\n',' - ').replace(';',' - ').replace("Titre: ","").replace("Auteur: "," - ").replace("Titre : ","").replace("Auteur : "," - ").replace("Title: ","").replace("Author: "," - ").replace("Title : ","").replace("Author : "," - ").replace(" by "," - ").replace(" par "," - ")
     output = re.sub(r'Note:.*', '', output)
     output = re.sub(r'Note :.*', '', output)
-
+    output = output.replace('- -','-')
     return output
