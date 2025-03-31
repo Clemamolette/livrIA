@@ -2,7 +2,7 @@
 
 <img src="src/logo livria.png" width="500em">
 
-LivrIA est une solution d'IA permettant d'obtenir la liste des livres présent dans une phot de biliothèque.
+LivrIA est une solution d'IA permettant d'obtenir la liste des livres présents dans une photo de biliothèque.
 
 La liste d'application est multiple, ce workflow peut s'inscrire dans un projet de gestion d'inventaire pour les bibliothèques, de suivi de collection personnelle ou de recherche d'un livre précis sur une étagère de livres non triés.
 
