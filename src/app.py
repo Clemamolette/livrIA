@@ -30,11 +30,11 @@ if not os.path.exists(output_folder):
 @st.cache_data(show_spinner=False)
 def extract_text_from_mask(mask_path):
     model = ""
-    if model_selected.startswith("Modèle 1"):
+    if model_selected.startswith("Minicpm"):
         model = "minicpm-v"
-    elif model_selected.startswith("Modèle 2"):
+    elif model_selected.startswith("Llava-phi3"):
         model = "llava-phi3"
-    elif model_selected.startswith("Modèle 3"):
+    elif model_selected.startswith("Llama3.2-vision"):
         model = "llama3.2-vision"
     else:
         raise ValueError("Modèle non reconnu")
@@ -63,7 +63,7 @@ with center:
 with select:
     model_selected = st.selectbox(
         "Choisissez le modèle d'OCR à utiliser :",
-        ("Modèle 1 - rapide mais peu précis", "Modèle 2 - assez lent mais plus précis", "Modèle 3 - très lent mais très précis"),
+        ("Minicpm - rapide mais peu précis", "Llava-phi3 - assez lent mais plus précis", "Llama3.2-vision - très lent mais très précis"),
         placeholder="Modèle d'OCR à sélectionner",
         index=None
     )
