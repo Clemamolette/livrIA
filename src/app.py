@@ -46,7 +46,7 @@ def highlight_book(image, boxes, selected_index=None):
     draw = ImageDraw.Draw(image)
     for i, box in enumerate(boxes):
         color = "red" if i == selected_index else "white"
-        draw.polygon(box.flatten().tolist(), outline=color, width=4)
+        draw.polygon(box.flatten().tolist(), outline=color, width=10)
     return image
 
 
@@ -62,7 +62,7 @@ with center:
         label="Sélectionner une photo de bibliothèque", label_visibility="visible")
 with select:
     model_selected = st.selectbox(
-        "Choisissez le modèle d'OCR à utiliser :",
+        "Choisissez le modèle de vision à utiliser :",
         ("Minicpm - rapide mais peu précis", "Llava-phi3 - assez lent mais plus précis", "Llama3.2-vision - très lent mais très précis"),
         placeholder="Modèle d'OCR à sélectionner",
         index=None

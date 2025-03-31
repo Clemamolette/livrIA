@@ -9,7 +9,7 @@ def get_data_from_sprin(image_path: str, model: Literal['llama3.2-vision', 'llav
         messages=[
             {
                 'role': 'system',
-                'content': "Ton objectif est d'extraitre le titre et l'auteur d'un livre à partir d'une photo de sa côte. Répond de manière concise et efficace. Lorsque c'est impossible de lire les informations, renvoie 'Inconnu.'.",
+                'content': "Ton objectif est d'extraitre le titre, sous-titre et l'auteur d'un livre STRICTEMENT à partir d'une photo de sa côte, juste en y lisant les caractères inscrits. Répond de manière concise et efficace. Lorsque c'est impossible de lire les informations, renvoie 'Inconnu.'.",
             },
             {
                 'role': 'user',
