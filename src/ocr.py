@@ -1,6 +1,6 @@
 import ollama
 from typing import Literal
-
+import re
 
 def get_data_from_sprin(image_path: str, model: Literal['llama3.2-vision', 'llava-phi3', 'vision']) -> str:
 
@@ -21,6 +21,8 @@ def get_data_from_sprin(image_path: str, model: Literal['llama3.2-vision', 'llav
     output = response['message']['content'].strip()
 
     # remove all '\n' and replace them with a space
-    output = output.replace('\n','').replace(';','\n').replace("Titre: ","").replace("Auteur: ","\n - \n").replace("Titre : ","").replace("Auteur : ","\n - \n").replace("Title: ","").replace("Author: ","\n - \n").replace("Title : ","").replace("Author : ","\n - \n")
+    output = output.replace('\n',' - ').replace(';',' - ').replace("Titre: ","").replace("Auteur: "," - ").replace("Titre : ","").replace("Auteur : "," - ").replace("Title: ","").replace("Author: "," - ").replace("Title : ","").replace("Author : "," - ")
+    output = re.sub(r'Note:.*', '', output)
+    output = re.sub(r'Note :.*', '', output)
 
     return output
